@@ -2,7 +2,7 @@ package limit
 
 import (
 	"errors"
-	logger "github.com/sirupsen/logrus"
+	"fmt"
 )
 
 type RuleConfig struct {
@@ -55,7 +55,7 @@ func NewLimitEngine(ruleConfig *RuleConfig) (*LimitEngine, error) {
 	if config.LimitStrategy == QPSStrategy {
 		limiter, err := NewQPSLimiter(int64(config.MaxAllows), int64(config.PeriodMs))
 		if err != nil {
-			logger.Errorf("create NewQPSLimiter error, err: %s", err)
+			fmt.Errorf("create NewQPSLimiter error, err: %s", err)
 			return nil, err
 		}
 		l.limiter = limiter
@@ -63,7 +63,7 @@ func NewLimitEngine(ruleConfig *RuleConfig) (*LimitEngine, error) {
 	} else if config.LimitStrategy == RateLimiterStrategy {
 		limiter, err := NewRateLimiter(int64(config.MaxAllows), int64(config.PeriodMs), float64(config.MaxBurstRatio))
 		if err != nil {
-			logger.Errorf("create NewRateLimiter error, err: %s", err)
+			fmt.Errorf("create NewRateLimiter error, err: %s", err)
 			return nil, err
 		}
 		l.limiter = limiter

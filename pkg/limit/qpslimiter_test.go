@@ -1,10 +1,10 @@
 package limit
 
 import (
+	"fmt"
 	"math"
 	"testing"
 	"time"
-	logger "github.com/sirupsen/logrus"
 	"github.com/Algo-Lab/RateLimiter/pkg/utils"
 )
 
@@ -53,11 +53,11 @@ func TestQpsLimiter_TryAcquire2(t *testing.T) {
 	intervals := []time.Duration{500, 10}
 	sleepSec := time.Duration(3)
 
-	logger.Infof("start")
+	fmt.Println("start")
 	for _, maxAllow := range maxAllowsList {
 		for _, periodMs := range periodMsList {
 			for _, interval := range intervals {
-				logger.Infof("maxAllow=%d, periodMs=%d, interval=%d", maxAllow, periodMs, interval)
+				fmt.Printf("maxAllow=%d, periodMs=%d, interval=%d", maxAllow, periodMs, interval)
 				limiter, _ := NewQPSLimiter(maxAllow, periodMs)
 
 				total := 0
@@ -73,7 +73,7 @@ func TestQpsLimiter_TryAcquire2(t *testing.T) {
 				time.Sleep(sleepSec * time.Second)
 				ticker.Stop()
 				threshold := math.Min(float64(maxAllow*1000*int64(sleepSec))/float64(periodMs), float64(total))
-				logger.Infof("total=%d, success=%d, threshold=%f", total, success, threshold)
+				fmt.Printf("total=%d, success=%d, threshold=%f", total, success, threshold)
 				if math.Abs(float64(success)-threshold) > 1 {
 					t.Errorf("false, success=%d", success)
 				}

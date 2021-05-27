@@ -1,11 +1,11 @@
 package limit
 
 import (
-	logger "github.com/sirupsen/logrus"
+	"fmt"
+	"github.com/Algo-Lab/RateLimiter/pkg/utils"
 	"math"
 	"testing"
 	"time"
-	"github.com/Algo-Lab/RateLimiter/pkg/utils"
 )
 
 func TestRateLimiter_TryAcquire(t *testing.T) {
@@ -53,11 +53,11 @@ func TestRateLimiter_TryAcquire2(t *testing.T) {
 	intervals := []time.Duration{500, 10}
 	sleepSec := time.Duration(3)
 
-	logger.Infof("start")
+	fmt.Println("start")
 	for _, maxAllow := range maxAllowsList {
 		for _, periodMs := range periodMsList {
 			for _, interval := range intervals {
-				logger.Infof("maxAllow=%d, periodMs=%d, interval=%d", maxAllow, periodMs, interval)
+				fmt.Printf("maxAllow=%d, periodMs=%d, interval=%d", maxAllow, periodMs, interval)
 				limiter, _ := NewRateLimiter(maxAllow, periodMs, 1.0)
 
 				total := 0
@@ -73,7 +73,7 @@ func TestRateLimiter_TryAcquire2(t *testing.T) {
 				time.Sleep(sleepSec * time.Second)
 				ticker.Stop()
 				threshold := math.Min(float64(maxAllow*1000*int64(sleepSec))/float64(periodMs), float64(total))
-				logger.Infof("total=%d, success=%d, threshold=%f", total, success, threshold)
+				fmt.Printf("total=%d, success=%d, threshold=%f", total, success, threshold)
 				if math.Abs(float64(success)-threshold) > 1 {
 					t.Errorf("false, success=%d", success)
 				}
