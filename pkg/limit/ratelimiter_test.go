@@ -1,14 +1,15 @@
-package pkg
+package limit
 
 import (
+	logger "github.com/sirupsen/logrus"
 	"math"
 	"testing"
 	"time"
-	logger "github.com/sirupsen/logrus"
+
 )
 
-func TestQpsLimiter_TryAcquire(t *testing.T) {
-	limiter, err := NewQPSLimiter(0, 1000)
+func TestRateLimiter_TryAcquire(t *testing.T) {
+	limiter, err := NewRateLimiter(0, 1000, 1.0)
 	if err != nil {
 		t.Errorf("%v", err)
 	}
@@ -20,8 +21,8 @@ func TestQpsLimiter_TryAcquire(t *testing.T) {
 	}
 }
 
-func TestQpsLimiter_TryAcquire1(t *testing.T) {
-	limiter, err := NewQPSLimiter(1, 1000)
+func TestRateLimiter_TryAcquire1(t *testing.T) {
+	limiter, err := NewRateLimiter(1, 1000, 1.0)
 	if err != nil {
 		t.Errorf("%v", err)
 	}
@@ -46,7 +47,7 @@ func TestQpsLimiter_TryAcquire1(t *testing.T) {
 	}
 }
 
-func TestQpsLimiter_TryAcquire2(t *testing.T) {
+func TestRateLimiter_TryAcquire2(t *testing.T) {
 	maxAllowsList := []int64{1, 20, 500}
 	periodMsList := []int64{1000, 3000}
 	intervals := []time.Duration{500, 10}
@@ -57,7 +58,7 @@ func TestQpsLimiter_TryAcquire2(t *testing.T) {
 		for _, periodMs := range periodMsList {
 			for _, interval := range intervals {
 				logger.Infof("maxAllow=%d, periodMs=%d, interval=%d", maxAllow, periodMs, interval)
-				limiter, _ := NewQPSLimiter(maxAllow, periodMs)
+				limiter, _ := NewRateLimiter(maxAllow, periodMs, 1.0)
 
 				total := 0
 				success := 0

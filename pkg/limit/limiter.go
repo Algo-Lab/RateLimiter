@@ -1,4 +1,4 @@
-package pkg
+package limit
 
 // Limiter limit
 type Limiter interface {
