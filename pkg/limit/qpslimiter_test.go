@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 	logger "github.com/sirupsen/logrus"
+	"github.com/Algo-Lab/RateLimiter/pkg/utils"
 )
 
 func TestQpsLimiter_TryAcquire(t *testing.T) {

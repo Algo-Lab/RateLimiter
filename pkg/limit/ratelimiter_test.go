@@ -5,7 +5,7 @@ import (
 	"math"
 	"testing"
 	"time"
-
+	"github.com/Algo-Lab/RateLimiter/pkg/utils"
 )
 
 func TestRateLimiter_TryAcquire(t *testing.T) {
